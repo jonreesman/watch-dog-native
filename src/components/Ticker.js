@@ -18,7 +18,7 @@ const style = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         height: 120,
-        marginBottom: 5,
+        marginTop: 5,
         flexDirection: 'row',
     },
     tickerStyle: {
