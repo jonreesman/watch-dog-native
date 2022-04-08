@@ -53,7 +53,8 @@ const Chart = ({ priceData, title, label, interval, timeMin}) => {
                     r: "6",
                     strokeWidth: "2",
                     stroke: "#ffa726",
-                }
+                },
+
             }}
             fromZero={setMin(title)}
             bezier

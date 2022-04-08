@@ -12,6 +12,8 @@ export default () => {
             setResults(response.data)
             setDataRetrieved(true);
         } catch (err) {
+            setDataRetrieved(false);
+            console.log("wtf ", id);
             console.log(err);
         }
     }

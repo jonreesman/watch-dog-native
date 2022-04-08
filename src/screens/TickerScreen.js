@@ -1,39 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, FlatList } from 'react-native';
+import { Text, StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
 import useTicker from '../hooks/useTicker';
-import Chart from '../components/Chart.js';
-import TweetEmbed from 'react-tweet-embed';
+import VictoryChartWrapper from '../components/VictoryChartWrapper.js';
 
 const TickerScreen = ({ navigation }) => {
     const [interval, setInterval] = useState('day');
-    const [getTickerAPI, dataRetrieved, result] = useTicker(navigation.getParam('id'), 'day');
-    const [graphData, setData] = useState([]);
+    const [getTickerAPI, dataRetrieved, result] = useTicker(navigation.getParam('id'), "day");
     const id = navigation.getParam('id');
 
     useEffect(() => {
-        getTickerAPI(navigation.getParam('id'),'day');
-        console.log(result);
+        getTickerAPI(navigation.getParam('id'),interval);
         console.log('EFFECT');
     }, []);
-
-    const setChartTimeMin = ({quote_history}) => {
-        let timeMin = new Date().getTime() / 1000;
-        for (const quote in quote_history) {
-            if (quote.TimeStamp < timeMin) {
-                timeMin = quote.TimeStamp;
-            }
-        }
-        return timeMin;
-    }
-    const setSentimentChartData = ({quote_history, sentiment_history}) => {
-        let chartData = [];
-        let index1 = 0;
-        let index2 = 0;
-        let current = 0;
-        for (const quote in quote_history) {
-
-        }
-    }
 
     const checkDataTime = (chart) => {
         if (chart.length < 2) {
@@ -53,28 +31,61 @@ const TickerScreen = ({ navigation }) => {
         </View>
         )
     } else {
-        console.log('========DEBUG==========');
-        console.log(result.ticker);
-        console.log(dataRetrieved);   
         return (
             <View style={styles.container}>
                 <Text style={styles.headerStyle}>{result.ticker.name}</Text>
-                <Chart 
-                title="Price History"
+                <VictoryChartWrapper 
+                title="Quote History"
                 style={styles.chartStyle}
-                priceData={checkDataTime(result.quote_history)} 
-                label='$' 
                 interval={interval}
-                timeMin={setChartTimeMin(result)}
+                priceData={checkDataTime(result.quote_history)} 
+                sentimentData={checkDataTime(result.sentiment_history)}
                 />
-                <Chart 
+                <View style={styles.intervalButtons}>
+                <TouchableOpacity 
+                        activeOpacity={0.9}
+                        style={styles.intervalButton}
+                        onPress={() => {
+                            setInterval("day");
+                            getTickerAPI(id,interval);
+                            }} >
+                        <Text style={{color: 'white'}}>day</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        activeOpacity={0.9}
+                        style={styles.intervalButton}
+                        onPress={() => {
+                            setInterval("week");
+                            getTickerAPI(id,interval);
+                            }} >
+                        <Text style={{color: 'white'}}>week</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        activeOpacity={0.9}
+                        style={styles.intervalButton}
+                        onPress={() => {
+                            getTickerAPI(id,interval);
+                            setInterval("month");
+                            }} >
+                        <Text style={{color: 'white'}}>month</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        activeOpacity={0.9}
+                        style={styles.intervalButton}
+                        onPress={() => {
+                            setInterval("2month");
+                            getTickerAPI(id,interval);
+                            }} >
+                        <Text style={{color: 'white'}}>two month</Text>
+                    </TouchableOpacity>
+                </View>
+                {/*<Chart 
                 title="Sentiment History"
                 style={styles.chartStyle}
                 priceData={checkDataTime(result.sentiment_history)} 
                 label=''
                 interval={interval}
-                timeMin={setChartTimeMin(result)}
-                />
+        />*/}
                 <FlatList 
                 data={result.statement_history}
                 keyExtractor={(result) => result.ID}
@@ -119,7 +130,22 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         marginTop: 2,
         alignItems: 'center',
+    },
+    intervalButtons: {
+        flexDirection: "row",
+        marginHorizontal: 40,
+        marginBottom: 10
+    },
+    intervalButton: {
+        flex: 1,
+        backgroundColor: 'blue',
+        marginHorizontal: 5,
+        alignItems: 'center',
+        height: 20,
+        borderRadius: 8,
+        justifyContent: 'center',
     }
+
 });
 
 export default TickerScreen;

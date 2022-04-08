@@ -14,7 +14,7 @@ export default () => {
             console.log(err);
             setErrorMessage('Something went wrong')
         }
-    }
+    };
 
     return [createTickerAPI, response, errorMessage];
 };

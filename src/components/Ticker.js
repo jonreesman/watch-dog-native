@@ -5,8 +5,8 @@ const Ticker = ({name, hourlySentiment, price}) => {
     return (
         <View style={style.container}>
             <Text style={style.tickerStyle}>{name}</Text>
-            <Text>{price}</Text>
-            <Text style={style.sentimentStyle}>Current Sentiment: {hourlySentiment}</Text>
+            <Text style={style.priceStyle}>${price}</Text>
+            <Text style={style.sentimentStyle}>Current Sentiment: {"\n"}{"\n"} {hourlySentiment}</Text>
         </View>
     );
 };
@@ -25,12 +25,23 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
         color: '#FEFFFF',
         fontSize: 18,
-        flex: 3,
+        flex: 1,
+        paddingVertical: 50,
+        paddingHorizontal: 30,
     },
     sentimentStyle: {
         color: '#FEFFFF',
         fontSize: 14,
-        flex: 2,
+        flex: 4,
+        paddingVertical: 40,
+        paddingHorizontal: 20,
+    },
+    priceStyle: {
+        color: '#FEFFFF',
+        fontSize: 14,
+        flex: 1,
+        paddingVertical: 50,
+        paddingHorizontal: 20,
     }
 });
 
